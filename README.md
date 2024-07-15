@@ -69,3 +69,30 @@ npm run dll
 - init：接受参数和设置初始值
 - render：渲染
 - event：事件绑定
+# 最常用ES6语法讲解以及课程环境搭建
+## import & export
+### 模块化历程 AMD、CMD、commonJS
+#### ES6模块【import export】与 commonJS【require() module.exports】区别
+- 静态化，必须在顶部，不能使用条件语句，自动采用严格模式
+- treeshaking和编译优化，以及webpack3中的作用域提升
+- 外部可是拿到实时值，而非缓存值（是引用而不是copy）
+1. 可以对commonJS模块重新赋值，对ES6模块重新赋值会编译报错
+2. 都可以对对象内部的值进行改变
+3. commonJS是对模块的拷贝，ES6是对模块的引用
+## const & let
+- 块级作用域
+- 使用let和const不再有变量提升，不允许重复声明
+- 使用上const优先
+## 箭头函数
+- 默认带return
+1. var f = v => v;
+2. var f = v => { return v };
+3. var f = () => ( {a: 1} ) // 返回对象时
+- 没有参数或者有多个参数，需要（）
+- this指向定义时的对象
+- 不可以作为构造函数（不是使用new）
+- 没有arguments对象
+# 登录模块开发-骨架及渲染部分
+
+
+

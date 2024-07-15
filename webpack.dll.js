@@ -3,7 +3,10 @@ const path = require('path');
 
 const vendors = [
   'es5-shim', 
-  'babel-polyfill'
+  //'babel-polyfill', 减少体积
+  'fetch-detector',
+  'fetch-ie8',
+  'es6-promise/auto'
 ];
 
 const options = {
