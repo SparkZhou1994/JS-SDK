@@ -52,6 +52,7 @@ custom: {
 npm run dll
 ```
 ### 启动项目 hb dev
+
 # 需求分析与架构设计
 ## 需求分析
 ### 前端技术指标
@@ -93,6 +94,149 @@ npm run dll
 - 不可以作为构造函数（不是使用new）
 - 没有arguments对象
 # 登录模块开发-骨架及渲染部分
+## Object.assign
+```
+import _ from 'lodash'
+
+const d = Symbol('d');
+console.log(Object.assign({a: 1, b:2}, {c:3, [d]: 4}))
+// {a: 1, b: 2, C: 3, Symbol(d): 4}
+// 性能慢 但推荐使用
+console.log(_.assign({a: 1, b: 2}, {c: 3, [d]: 4}))
+// {a: 1, b: 2, C: 3}
+// 只合并 字符串为key的值
+```
+## export
+```
+export const login = () => {}
+
+const login = () => {}
+export { login }
+
+export default login
+// 页面采用 pass.default 来引用
+// 其他js 可以 使用 import login from ’./login‘ 来引用， login(options)
+
+// ES6 是变量引用， 必须要有变量
+export var a = 1  
+
+// commonJS
+module.exports = login 
+
+// commonJS 采用直接copy，可以没有变量
+export 1
+```
+## 基本模板和自动补全
+定义时需要前缀，名字要长
+最好在获取元素后增加随机数, 规避冲突，防止脚本操作 （只使用元素只取一次的情况）
+使用id定义选择器 document.getElementById
+使用class定义样式
+chrome游览区会自动填充type为text和password的数据，所以需要把div放入form中
+
+# 登录模块开发-表单验证事件请求部分
+## import和export时的重命名
+```
+// utils.js
+export { getId }
+// event.js
+import { getId as $ } from '../common/utils' 
+```
+## fetch, async&amp;await
+fetch 默认不携带cookies， 添加credentials: 'include'开启携带cookie
+fetch 在mock时，mock.js是不管用的，可以使用fetch-mock
+```
+// 安装
+npm i fetch-mock --save-dev
+
+// mock.js
+FetchMock.mock('/login', {code: 200, message: 'success'})
+```
+## promise讲解
+async await 是ES7，依赖ES6 promise
+promise用来解决异步调用中回调嵌套过深的情况，如接口1调用接口2，接口2调用接口3，……，如下:
+```
+const s1 = (cb) => {
+	setTimeout( () => cb && cb('s1'), 1000); // cd 存在 则执行
+}
+
+const s2 = (cb) => {
+	setTimeout( () => cb && cb('s2'), 3000);
+}
+
+s1(v1 => {
+	console.log(v1);
+	s2(v2 => {
+		console.log(v2)
+	})
+})
+```
+### 使用promise的写法，如下
+```
+const p1 = () => {
+	return new Promise( (resolve, reject) => {
+		setTimeout( () => {
+			resolve('p1');
+		}, 1000)
+	})
+}
+
+const p2 = () => {
+	return new Promise( (resolve, reject) => {
+		setTimeout( () => {
+			resolve('p2');
+		}, 3000)
+	})
+}
+
+p1().then(v1 => console.log(v1))
+    .then(p2)
+	.then(v2 => console.log(v2))
+```
+### 使用await
+在async中才能使用await, await后面是一个promise
+以下代码等价于上面promise代码(then)
+```
+const av = async() => {
+	const a1 = await p1(); // a1就是p1中resolve中的值
+	// a1 的作用域在async中，而promise中的v1是独立的作用域
+	console.log(a1);
+	const a2 = await p2();
+	console.log(a2);
+}
+av();
+```
+## await使用注意
+```
+// 一秒后出现 p1
+const a1 = await p1();
+console.log(a1);
+// 三秒后出现 p2
+const a2 = await p2();
+console.log(a2)
+
+// 四秒后出现 p1 p2
+const a1 = await p1();
+const a2 = await p2();
+console.log(a1);
+console.log(a2);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
